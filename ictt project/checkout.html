@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+
+    <link rel="stylesheet" href="styling/checkout.css">
+</head>
+
+<body>
+
+<div class="checkout-box">
+
+    <h1>Checkout</h1>
+
+    <div class="summary">
+        <h2>Order Summary</h2>
+        <ul id="order-items"></ul>
+        <p style="font-size: 18px; font-weight: bold;">
+            Total Amount: Rs. <span id="order-total"></span>
+        </p>
+    </div>
+
+    
+    <div class="payment">
+        <h2>Payment Method</h2>
+        <select id="payment">
+            <option value="Cash on Delivery">Cash on Delivery</option>
+            <option value="Card Payment">Card Payment</option>
+        </select>
+    </div>
+
+    <div class="address">
+        <h2>Delivery Address</h2>
+        <textarea id="address" rows="4" placeholder="Enter your delivery address..."></textarea>
+    </div>
+
+    <button id="confirm-order">Confirm Order</button>
+
+    <p id="success-message" class="success"></p>
+
+</div>
+
+<script>
+    let items = JSON.parse(localStorage.getItem("cartItems")) || [];
+    let total = localStorage.getItem("cartTotal") || 0;
+
+    document.getElementById("order-total").textContent = total;
+
+    let list = document.getElementById("order-items");
+    items.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item.name + " — Rs. " + item.price;
+        list.appendChild(li);
+    });
+
+    document.getElementById("confirm-order").addEventListener("click", function() {
+
+        let pay = document.getElementById("payment").value;
+        let addr = document.getElementById("address").value;
+
+        if (addr.trim() === "") {
+            alert("Please enter delivery address!");
+            return;
+        }
+
+        document.getElementById("success-message").textContent =
+            "Order Confirmed! Payment: " + pay +
+            ". Your order will be delivered to: " + addr;
+
+  
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("cartTotal");
+    });
+</script>
+
+</body>
+</html>
